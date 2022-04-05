@@ -6,7 +6,7 @@ canvas.fillText("sarpele", 50, 300);
 canvas.fillText("!", 50, 350);
 
 // websocket
-const socket = new WebSocket('ws://localhost:8080');
+const socket = new WebSocket('ws://firegirl-and-waterboy-ws.herokuapp.com:8080');
 
 socket.onopen = (event) => {
    console.log('client: m-am conectat');
