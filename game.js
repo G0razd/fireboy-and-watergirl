@@ -5,8 +5,8 @@ canvas.font = "50px Comic Sans MS";
 canvas.fillText("sarpele", 50, 300);
 canvas.fillText("!", 50, 350);
 
-// websocket
-const socket = new WebSocket('ws://firegirl-and-waterboy-ws.herokuapp.com:8080');
+// WebSocket
+const socket = new WebSocket('ws://firegirl-and-waterboy.herokuapp.com');
 
 socket.onopen = (event) => {
    console.log('client: m-am conectat');
@@ -14,5 +14,5 @@ socket.onopen = (event) => {
 }
 
 socket.onmessage = (event) => {
-   console.log(event.data);
+   console.log(`data primit: ${event.data}`);
 }
