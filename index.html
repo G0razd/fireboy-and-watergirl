@@ -1,25 +1,26 @@
 <html lang="ro">
 
 <head>
+   <?php
+      echo 'sarpele';
+   ?>
    <title>Firegirl and Waterboy</title>
-   <script>
-      const socket = new WebSocket('ws://firegirl-and-waterboy.herokuapp.com');
-
-      socket.onopen = (event) => {
-         console.log('client: m-am conectat');
-         socket.send('m-am conectat!!');
-      }
-
-      socket.onmessage = (event) => {
-         console.log(`data primit: ${event.data}`);
-      }
-   </script>
+   <link rel="stylesheet" href="css/style.css">
+   <script src="js/connections.js"></script>
 </head>
 
 <body>
-   <canvas id="game" width="800" height="600" style="background-color: black"></canvas>
-   <!-- <script src="game.js"></script> -->
+   <canvas id="game" width="800" height="600" style="background-color: black; display: none"></canvas>
 
+   <form name="game-details" action="">
+      <label for="name">Nume:</label><input style="display: block" name="name" id="name">
+      <label for="code">Cod:</label><input style="display: block" name="code" id="code">
+
+      <button id="play">Play</button>
+   </form>
+
+   <button id="help" class="buttons">Help</button>
+   <script src="js/game.js"></script>
 </body>
 
 </html>

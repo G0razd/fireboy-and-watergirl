@@ -1,0 +1,15 @@
+{
+    "name": "ez/firegirl-and-waterboy",
+    "autoload": {
+        "psr-4": {
+            "Ez\\FiregirlAndWaterboy\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "ezluci",
+            "email": "ezluci1@gmail.com"
+        }
+    ],
+    "require": {}
+}

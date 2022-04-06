@@ -4,8 +4,8 @@ const WebSocket = require('ws');
 const PORT = process.env.PORT || 3000;
 
 const server = express()
-   .use((req, res) => res.sendFile('/index.html', { root: __dirname }))
-   .listen(PORT, () => console.log(`Listening on ${PORT}`));
+.use((req, res) => res.sendFile(req.path, { root: __dirname }))
+.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 const wss = new WebSocket.Server({ server });
 
@@ -24,10 +24,3 @@ wss.on('connection', ws => {
       console.log("Some Error occurred")
    }
 });
-
-console.log(`The WebSocket server is running on port ${PORT}`);
-setInterval(() => {
-   wss.clients.forEach((client) => {
-      client.send(new Date().toTimeString());
-   });
-}, 1000);
