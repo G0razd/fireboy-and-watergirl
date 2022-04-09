@@ -68,6 +68,9 @@ io.on('connection', (socket) => {
 
 
    socket.on('disconnect', () => {
+      if (users[room] === undefined)
+         return;
+      
       const index = users[room].findIndex( ({username: usrname}) => (username === usrname) )
       users[room].splice(index, 1)
       socket.in(room).emit('player-', username)
