@@ -66,8 +66,8 @@ socket.on('startPlay', () => {
       butUp.style.bottom = butSize + butSize + butSize/2
       butUp.style.width = butSize
       butUp.style.height = butSize
-      butUp.onmousedown = () => {up = 1}
-      butUp.onmouseup = () => {up = 0}
+      butUp.ontouchstart = () => {up = 1}
+      butUp.ontouchend = () => {up = 0}
       butUp.innerText = '^'
       document.body.appendChild(butUp)
 
@@ -77,8 +77,8 @@ socket.on('startPlay', () => {
       butLeft.style.bottom = butSize + butSize/2
       butLeft.style.width = butSize
       butLeft.style.height = butSize
-      butLeft.onmousedown = () => {left = 1}
-      butLeft.onmouseup = () => {left = 0}
+      butLeft.ontouchstart = () => {left = 1}
+      butLeft.ontouchend = () => {left = 0}
       butLeft.innerText = '<'
       document.body.appendChild(butLeft)
 
@@ -88,8 +88,8 @@ socket.on('startPlay', () => {
       butDown.style.bottom = butSize/2
       butDown.style.width = butSize
       butDown.style.height = butSize
-      butDown.onmousedown = () => {down = 1}
-      butDown.onmouseup = () => {down = 0}
+      butDown.ontouchstart = () => {down = 1}
+      butDown.ontouchend = () => {down = 0}
       butDown.innerText = 'd'
       document.body.appendChild(butDown)
 
@@ -99,8 +99,8 @@ socket.on('startPlay', () => {
       butRight.style.bottom = butSize + butSize/2
       butRight.style.width = butSize
       butRight.style.height = butSize
-      butRight.onmousedown = () => {right = 1}
-      butRight.onmouseup = () => {right = 0}
+      butRight.ontouchstart = () => {right = 1}
+      butRight.ontouchend = () => {right = 0}
       butRight.innerText = '>'
       document.body.appendChild(butRight)
    }
