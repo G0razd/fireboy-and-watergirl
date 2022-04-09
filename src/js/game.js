@@ -6,8 +6,10 @@ const chooseCharDiv = document.querySelector('#chooseChar')
 const playButDiv = document.querySelector('#play')
 const firegirl = new Image()
 const waterboy = new Image()
+const block = new Image()
 firegirl.src = '../images/firegirl.png'
 waterboy.src = '../images/waterboy.png'
+block.src = '../images/block.png'
 
 function addPlayerToDiv(usrname)
 {
@@ -50,15 +52,62 @@ socket.on('chooseChars', () => {
 })
 
 
+// every block has a size of 20px
+function colliding(x, y, xblock, yblock)
+{
+   let zone = ''
+   let area, areaMax = 0
+
+   if (xblock-19 <= x && x <= xblock+19 && yblock-19 <= y && y <= yblock-1)
+   {
+      area = Math.min(xblock+20, x+20) - Math.max(xblock, x)
+      if (area > areaMax)
+      {
+         areaMax = area
+         zone = 'n'
+      }
+   }
+   if (xblock-19 <= x && x <= xblock-1 && yblock-19 <= y && y <= yblock+19)
+   {
+      area = Math.min(yblock+20, y+20) - Math.max(yblock, y)
+      if (area > areaMax)
+      {
+         areaMax = area
+         zone = 'v'
+      }
+   }
+   if (xblock-19 <= x && x <= xblock+19 && yblock+1 <= y && y <= yblock+19)
+   {
+      area = Math.min(xblock+20, x+20) - Math.max(xblock, x)
+      if (area > areaMax)
+      {
+         areaMax = area
+         zone = 's'
+      }
+   }
+   if (xblock+1 <= x && x <= xblock+19 && yblock-19 <= y && y <= yblock+19)
+   {
+      area = Math.min(yblock+20, y+20) - Math.max(yblock, y)
+      if (area > areaMax)
+      {
+         areaMax = area
+         zone = 'e'
+      }
+   }
+
+   return zone
+}
+
+
 socket.on('startPlay', () => {
-   const speed = 5
+   const speed = 1.5
    let up, left, down, right
-   let coordsChanged
+   let xnew, ynew
 
    // android buttons
    if (window.navigator.userAgent.toLowerCase().indexOf('android') !== -1)
    {
-      const butSize = 8/100 * window.innerWidth
+      const butSize = 0.14 * window.innerWidth
 
       const butUp = document.createElement('button')
       butUp.classList = 'android_button'
@@ -105,33 +154,6 @@ socket.on('startPlay', () => {
       document.body.appendChild(butRight)
    }
 
-   setInterval(() => {
-      coordsChanged = 0
-
-      if (up) {
-         me.y -= speed
-         coordsChanged = 1
-      }
-      if (left) {
-         me.x -= speed
-         coordsChanged = 1
-      }
-      if (down) {
-         me.y += speed
-         coordsChanged = 1
-      }
-      if (right) {
-         me.x += speed
-         coordsChanged = 1
-      }
-
-      if (coordsChanged)
-         socket.emit('coords', {x: me.x, y: me.y})
-      canvas.clearRect(0, 0, canvasEl.width, canvasEl.height)
-      canvas.drawImage(me.image, me.x, me.y, 100, 100)
-      canvas.drawImage(yo.image, yo.x, yo.y, 100, 100)
-   }, 13)
-
    document.onkeydown = (key) => {
       switch (key.code)
       {
@@ -164,6 +186,57 @@ socket.on('startPlay', () => {
       yo.x = x;
       yo.y = y;
    })
+
+   // game loop
+   // 29 blocks vertically, 39 blocks horizontally
+   // 20px each block, 20px remaining space
+   setInterval(() => {
+
+      xnew = me.x
+      ynew = me.y
+      if (up)
+         ynew -= speed
+      if (left)
+         xnew -= speed
+      if (down)
+         ynew += speed
+      if (right)
+         xnew += speed
+
+      if (!(xnew === me.x && ynew === me.y))
+      {
+         if (xnew < 0)
+            xnew = 0
+         if (ynew < 0)
+            ynew = 0
+         if (xnew > canvasEl.width - 20)
+            xnew = canvasEl.width - 20
+         if (ynew > canvasEl.height - 20)
+            ynew = canvasEl.height - 20
+
+         const collidingZone = colliding(xnew, ynew, 150, 150)
+         switch (collidingZone)
+         {
+            case 'n':
+               ynew = 130; break;
+            case 'v':
+               xnew = 130; break;
+            case 's':
+               ynew = 170; break;
+            case 'e':
+               xnew = 170; break;
+         }
+
+         me.x = xnew
+         me.y = ynew
+         socket.emit('coords', {x: me.x, y: me.y})
+      }
+
+      canvas.clearRect(0, 0, canvasEl.width, canvasEl.height)
+      canvas.drawImage(me.image, me.x, me.y, 20, 20)
+      canvas.drawImage(yo.image, yo.x, yo.y, 20, 20)
+      canvas.drawImage(block, 150, 150, 20, 20)
+   }, 13)
 })
 
 
