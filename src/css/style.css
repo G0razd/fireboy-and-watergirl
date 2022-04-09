@@ -11,3 +11,7 @@
 .logmsg {
    display: block;
 }
+
+.android_button {
+   position: fixed;
+}

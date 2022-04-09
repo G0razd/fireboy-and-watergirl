@@ -55,6 +55,56 @@ socket.on('startPlay', () => {
    let up, left, down, right
    let coordsChanged
 
+   // android buttons
+   if (window.navigator.userAgent.toLowerCase().indexOf('android') !== -1)
+   {
+      const butSize = 8/100 * window.innerWidth
+
+      const butUp = document.createElement('button')
+      butUp.classList = 'android_button'
+      butUp.style.left = butSize + butSize/2
+      butUp.style.bottom = butSize + butSize + butSize/2
+      butUp.style.width = butSize
+      butUp.style.height = butSize
+      butUp.onmousedown = () => {up = 1}
+      butUp.onmouseup = () => {up = 0}
+      butUp.innerText = '^'
+      document.body.appendChild(butUp)
+
+      const butLeft = document.createElement('button')
+      butLeft.classList = 'android_button'
+      butLeft.style.left = butSize/2
+      butLeft.style.bottom = butSize + butSize/2
+      butLeft.style.width = butSize
+      butLeft.style.height = butSize
+      butLeft.onmousedown = () => {left = 1}
+      butLeft.onmouseup = () => {left = 0}
+      butLeft.innerText = '<'
+      document.body.appendChild(butLeft)
+
+      const butDown = document.createElement('button')
+      butDown.classList = 'android_button'
+      butDown.style.left = butSize + butSize/2
+      butDown.style.bottom = butSize/2
+      butDown.style.width = butSize
+      butDown.style.height = butSize
+      butDown.onmousedown = () => {down = 1}
+      butDown.onmouseup = () => {down = 0}
+      butDown.innerText = 'd'
+      document.body.appendChild(butDown)
+
+      const butRight = document.createElement('button')
+      butRight.classList = 'android_button'
+      butRight.style.left = butSize + butSize + butSize/2
+      butRight.style.bottom = butSize + butSize/2
+      butRight.style.width = butSize
+      butRight.style.height = butSize
+      butRight.onmousedown = () => {right = 1}
+      butRight.onmouseup = () => {right = 0}
+      butRight.innerText = '>'
+      document.body.appendChild(butRight)
+   }
+
    setInterval(() => {
       coordsChanged = 0
 

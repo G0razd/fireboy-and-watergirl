@@ -53,6 +53,9 @@ io.on('connection', (socket) => {
 
 
    socket.on('chooseFiregirl', () => {
+      if (users[room] === undefined)
+         return
+
       users[room].find(({username: usrname}) => (usrname === username)).character = 'firegirl'
       io.in(room).emit('log', `Player ${username} chose Firegirl.`)
       if (users[room].find(({username: usrname}) => (usrname !== username)).character !== undefined)
@@ -60,6 +63,9 @@ io.on('connection', (socket) => {
    })
 
    socket.on('chooseWaterboy', () => {
+      if (users[room] === undefined)
+         return
+
       users[room].find(({username: usrname}) => (usrname === username)).character = 'waterboy'
       io.in(room).emit('log', `Player ${username} chose Waterboy.`)
       if (users[room].find(({username: usrname}) => (usrname !== username)).character !== undefined)
@@ -69,7 +75,7 @@ io.on('connection', (socket) => {
 
    socket.on('disconnect', () => {
       if (users[room] === undefined)
-         return;
+         return
 
       const index = users[room].findIndex( ({username: usrname}) => (username === usrname) )
       users[room].splice(index, 1)
