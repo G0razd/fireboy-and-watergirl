@@ -11,15 +11,31 @@
       const params = new URLSearchParams(query);
       const username = params.get('username');
       const room = params.get('room');
+      const socket = io()
    </script>
 </head>
 
 <body>
    <canvas id="game" width="800" height="600" style="background-color: black; display: none"></canvas>
+   <div id="chooseChar" style="display: none">
+      <button onclick="
+         socket.emit('chooseFiregirl')
+         this.parentElement.style.display = 'none'
+         me = {character: 'firegirl', image: firegirl, x: 0, y: 0}
+         yo = {character: 'waterboy', image: waterboy, x: 50, y: 50}
+      ">Firegirl</button>
+      <button onclick="
+         socket.emit('chooseWaterboy')
+         this.parentElement.style.display = 'none'
+         me = {character: 'firegirl', image: waterboy, x: 50, y: 50}
+         yo = {character: 'waterboy', image: firegirl, x: 0, y: 0}
+      ">Waterboy</button>
+   </div>
    <div id="players" style="font-size: x-large"></div>
+   <div id="log" style="display: inline"></div>
 
+   <button id="play" onclick="play()" class="buttons">Play</button>
    <button id="help" class="buttons">Help</button>
-   <script src="js/connection.js"></script>
    <script src="js/game.js"></script>
 </body>
 

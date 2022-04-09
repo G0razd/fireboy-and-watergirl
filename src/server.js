@@ -21,22 +21,55 @@ io.on('connection', (socket) => {
       username = usrname
       room = rom
 
-      users.push({username, room, id})
+      if (users[room] === undefined)
+         users[room] = []
+
+      users[room].push({username: username, id: id})
+      socket.emit('otherUsernames', users[room])
+
       socket.join(room)
       socket.in(room).emit('player+', username)
-
-      const otherUsernames = []
-      users.forEach(user => {
-         if (user.room === room)
-            otherUsernames.push(user.username)
-      })
-
-      socket.emit('otherUsernames', otherUsernames)
    })
 
+
+   socket.on('tryPlay', () => {
+      io.in(room).emit('log', `Player ${username} tried to start the game.`)
+
+      if (users[room].length > 2)
+         io.in(room).emit('log', `Too many players! ${users[room].length - 2} players need to leave from this room.`)
+      else if (users[room].length < 2)
+         io.in(room).emit('log', `Too few players! ${2 - users[room].length} players need to enter in this room.`)
+      else
+      {
+         io.in(room).emit('log', 'Choose your characters.')
+         io.in(room).emit('chooseChars')
+      }
+   })
+
+
+   socket.on('coords', ({x: x, y: y}) => {
+      socket.in(room).emit('coords', {x: x, y: y});
+   })
+
+
+   socket.on('chooseFiregirl', () => {
+      users[room].find(({username: usrname}) => (usrname === username)).character = 'firegirl'
+      io.in(room).emit('log', `Player ${username} chose Firegirl.`)
+      if (users[room].find(({username: usrname}) => (usrname !== username)).character !== undefined)
+         io.in(room).emit('startPlay')
+   })
+
+   socket.on('chooseWaterboy', () => {
+      users[room].find(({username: usrname}) => (usrname === username)).character = 'waterboy'
+      io.in(room).emit('log', `Player ${username} chose Waterboy.`)
+      if (users[room].find(({username: usrname}) => (usrname !== username)).character !== undefined)
+         io.in(room).emit('startPlay')
+   })
+
+
    socket.on('disconnect', () => {
-      const index = users.findIndex( ({username: usrname, room: rom, id: id}) => (room === rom && username === usrname) )
-      users.splice(index, 1)
+      const index = users[room].findIndex( ({username: usrname}) => (username === usrname) )
+      users[room].splice(index, 1)
       socket.in(room).emit('player-', username)
    })
 })
