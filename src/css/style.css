@@ -3,3 +3,7 @@
    margin: 3%;
    font-size: large;
 }
+
+.player {
+   display: block;
+}

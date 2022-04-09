@@ -2,10 +2,10 @@
   "name": "firegirl-and-waterboy",
   "version": "1.0.0",
   "description": "Fireboy and Watergirl, but it's multiplayer.",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node src/server.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/ezluci/firegirl-and-waterboy#readme",
   "dependencies": {
     "express": "^4.17.3",
-    "ws": "^8.5.0"
+    "http": "^0.0.1-security",
+    "socket.io": "^4.4.1"
   }
 }

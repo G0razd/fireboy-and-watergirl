@@ -1,0 +1,26 @@
+<html lang="ro">
+
+<head>
+   <title>Firegirl and Waterboy</title>
+   <link rel="stylesheet" href="css/style.css">
+   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+
+   <script src="js/socket.io.min.js"></script>
+   <script>
+      const query = window.location.search;
+      const params = new URLSearchParams(query);
+      const username = params.get('username');
+      const room = params.get('room');
+   </script>
+</head>
+
+<body>
+   <canvas id="game" width="800" height="600" style="background-color: black; display: none"></canvas>
+   <div id="players" style="font-size: x-large"></div>
+
+   <button id="help" class="buttons">Help</button>
+   <script src="js/connection.js"></script>
+   <script src="js/game.js"></script>
+</body>
+
+</html>
