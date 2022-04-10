@@ -11,6 +11,24 @@ firegirl.src = '../images/firegirl.png'
 waterboy.src = '../images/waterboy.png'
 block.src = '../images/block.png'
 
+
+
+
+const xhr = new XMLHttpRequest()
+let map
+xhr.onload = () => {
+   map = JSON.parse(xhr.response)
+}
+xhr.open('get', '../maps/level1.json')
+xhr.send()
+
+
+
+
+
+
+
+
 function addPlayerToDiv(usrname)
 {
    const spanEl = document.createElement('span')
@@ -50,53 +68,6 @@ socket.on('chooseChars', () => {
    chooseCharDiv.style.display = 'inline'
    playButDiv.style.display = 'none'
 })
-
-
-// every block has a size of 20px
-function colliding(x, y, xblock, yblock)
-{
-   let zone = ''
-   let area, areaMax = 0
-
-   if (xblock-19 <= x && x <= xblock+19 && yblock-19 <= y && y <= yblock-1)
-   {
-      area = Math.min(xblock+20, x+20) - Math.max(xblock, x)
-      if (area > areaMax)
-      {
-         areaMax = area
-         zone = 'n'
-      }
-   }
-   if (xblock-19 <= x && x <= xblock-1 && yblock-19 <= y && y <= yblock+19)
-   {
-      area = Math.min(yblock+20, y+20) - Math.max(yblock, y)
-      if (area > areaMax)
-      {
-         areaMax = area
-         zone = 'v'
-      }
-   }
-   if (xblock-19 <= x && x <= xblock+19 && yblock+1 <= y && y <= yblock+19)
-   {
-      area = Math.min(xblock+20, x+20) - Math.max(xblock, x)
-      if (area > areaMax)
-      {
-         areaMax = area
-         zone = 's'
-      }
-   }
-   if (xblock+1 <= x && x <= xblock+19 && yblock-19 <= y && y <= yblock+19)
-   {
-      area = Math.min(yblock+20, y+20) - Math.max(yblock, y)
-      if (area > areaMax)
-      {
-         areaMax = area
-         zone = 'e'
-      }
-   }
-
-   return zone
-}
 
 
 socket.on('startPlay', () => {
@@ -214,28 +185,20 @@ socket.on('startPlay', () => {
          if (ynew > canvasEl.height - 20)
             ynew = canvasEl.height - 20
 
-         const collidingZone = colliding(xnew, ynew, 150, 150)
-         switch (collidingZone)
-         {
-            case 'n':
-               ynew = 130; break;
-            case 'v':
-               xnew = 130; break;
-            case 's':
-               ynew = 170; break;
-            case 'e':
-               xnew = 170; break;
-         }
+         const fixed = fixCollisions(xnew, ynew)
 
-         me.x = xnew
-         me.y = ynew
+         me.x = fixed.x
+         me.y = fixed.y
          socket.emit('coords', {x: me.x, y: me.y})
       }
 
       canvas.clearRect(0, 0, canvasEl.width, canvasEl.height)
       canvas.drawImage(me.image, me.x, me.y, 20, 20)
       canvas.drawImage(yo.image, yo.x, yo.y, 20, 20)
-      canvas.drawImage(block, 150, 150, 20, 20)
+      for (let i = 0; i < 29; ++i)
+         for (let j = 0; j < 39; ++j)
+            if (map[i][j] === 1)
+               canvas.drawImage(block, j*20, i*20, 20, 20) // OX != i, OY != j
    }, 13)
 })
 

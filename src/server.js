@@ -73,6 +73,19 @@ io.on('connection', (socket) => {
    })
 
 
+   socket.on('levelFinish', () => {
+      users[room].find(({username: usrname}) => (usrname === username)).levelFinished = true
+
+      if (users[room].find(({username: usrname}) => (usrname !== username)).levelFinished === true)
+      {
+         io.in(room).emit('nextLevel')
+         users[room].forEach(user => {
+            user.levelFinished = false
+         })
+      }
+   })
+
+
    socket.on('disconnect', () => {
       if (users[room] === undefined)
          return

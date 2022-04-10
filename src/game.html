@@ -36,10 +36,19 @@
 
    <button id="play" onclick="play()" class="buttons">Play</button>
    <button id="help" class="buttons">Help</button>
+   <script src="js/collisions.js"></script>
    <script src="js/game.js"></script>
 WASD TO MOVE<br><a target="_blank" href="https://github.com/ezluci/firegirl-and-waterboy/tree/working-branch">github repository</a><br>
 discord ez#3456
-
+<label style="position: fixed; right: 19%; left: auto; top: 5px">event</label><input width="12%" id="socketevent" style="position: fixed; right: 0; left: auto; top: 5px">
+<label style="position: fixed; right: 19%; left: auto; top: 35px">msg</label><input width="12%" id="socketmsg" style="position: fixed; right: 0; left: auto; top: 35px">
+   <input type="checkbox" id="socketmsgyes" style="position: fixed; right: 11%; left: auto; top: 55px"><label style="position: fixed; right: 13%; left: auto; top: 55px">with msg</label>
+<button onclick="
+if (document.querySelector('#socketmsgyes').checked)
+   socket.emit(document.querySelector('#socketevent').value, document.querySelector('#socketmsg').value)
+else
+   socket.emit(document.querySelector('#socketevent').value)
+" style="position: fixed; right: 5px; left: auto; top: 60px">socket send</button>
 </body>
 
 </html>
