@@ -7,9 +7,11 @@ const playButDiv = document.querySelector('#play')
 const firegirl = new Image()
 const waterboy = new Image()
 const block = new Image()
+const background = new Image()
 firegirl.src = '../images/firegirl.png'
 waterboy.src = '../images/waterboy.png'
 block.src = '../images/block.png'
+background.src = '../images/background.png'
 
 
 
@@ -193,6 +195,7 @@ socket.on('startPlay', () => {
       }
 
       canvas.clearRect(0, 0, canvasEl.width, canvasEl.height)
+      canvas.drawImage(background, 0, 0, canvasEl.width, canvasEl.height) // background image
       canvas.drawImage(me.image, me.x, me.y, 20, 20)
       canvas.drawImage(yo.image, yo.x, yo.y, 20, 20)
       for (let i = 0; i < 29; ++i)
