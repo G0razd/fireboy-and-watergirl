@@ -1,2 +1,2 @@
-# firegirl-and-waterboy
+# fireboy-and-watergirl
 Fireboy and Watergirl, but multiplayer.
