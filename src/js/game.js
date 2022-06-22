@@ -71,20 +71,22 @@ socket.on('chooseChars', () => {
    playButDiv.style.display = 'none'
 })
 
-
 socket.on('startPlay', () => {
-   const speed = 1.5
-   let up, left, down, right
+   let xvel = 0, yvel = 0
    let xnew, ynew
+   const pressedKeys = {}
+
 
    // android buttons
+   /* sorry android, not now
    if (window.navigator.userAgent.toLowerCase().indexOf('android') !== -1)
    {
       const butSize = 0.14 * window.innerWidth
 
       const butUp = document.createElement('button')
       butUp.classList = 'android_button'
-      butUp.style.left = butSize + butSize/2
+      butUp.style.
+      left = butSize + butSize/2
       butUp.style.bottom = butSize + butSize + butSize/2
       butUp.style.width = butSize
       butUp.style.height = butSize
@@ -126,33 +128,14 @@ socket.on('startPlay', () => {
       butRight.innerText = '>'
       document.body.appendChild(butRight)
    }
+   */
 
-   document.onkeydown = (key) => {
-      switch (key.code)
-      {
-         case 'KeyW':
-            up = 1;  break;
-         case 'KeyA':
-            left = 1;   break;
-         case 'KeyS':
-            down = 1;   break;
-         case 'KeyD':
-            right = 1;  break;
-      }
+   document.onkeydown = (event) => {
+      pressedKeys[event.key.toLowerCase()] = 1
    }
 
-   document.onkeyup = (key) => {
-      switch (key.code)
-      {
-         case 'KeyW':
-            up = 0;  break;
-         case 'KeyA':
-            left = 0;   break;
-         case 'KeyS':
-            down = 0;   break;
-         case 'KeyD':
-            right = 0;  break;
-      }
+   document.onkeyup = (event) => {
+      pressedKeys[event.key.toLowerCase()] = 0
    }
 
    socket.on('coords', ({x: x, y: y}) => {
@@ -160,21 +143,31 @@ socket.on('startPlay', () => {
       yo.y = y;
    })
 
-   // game loop
+   // GAME LOOP!
    // 29 blocks vertically, 39 blocks horizontally
    // 20px each block, 20px remaining space
    setInterval(() => {
 
-      xnew = me.x
-      ynew = me.y
-      if (up)
-         ynew -= speed
-      if (left)
-         xnew -= speed
-      if (down)
-         ynew += speed
-      if (right)
-         xnew += speed
+      if (pressedKeys['w'] && pressedKeys['s'])
+         {}
+      else if (pressedKeys['w'])
+         yvel = Math.max(-1.5, yvel - 0.1)
+      else if (pressedKeys['s'])
+         yvel = Math.min(1.5, yvel + 0.1)
+      else
+         yvel = 0
+
+      if (pressedKeys['a'] && pressedKeys['d'])
+         {}
+      else if (pressedKeys['a'])
+         xvel = Math.max(-1.5, xvel - 0.1)
+      else if (pressedKeys['d'])
+         xvel = Math.min(1.5, xvel + 0.1)
+      else
+         xvel = 0
+
+      xnew = me.x + xvel
+      ynew = me.y + yvel
 
       if (!(xnew === me.x && ynew === me.y))
       {
@@ -196,8 +189,8 @@ socket.on('startPlay', () => {
 
       canvas.clearRect(0, 0, canvasEl.width, canvasEl.height)
       canvas.drawImage(background, 0, 0, canvasEl.width, canvasEl.height) // background image
-      canvas.drawImage(me.image, me.x, me.y, 20, 20)
       canvas.drawImage(yo.image, yo.x, yo.y, 20, 20)
+      canvas.drawImage(me.image, me.x, me.y, 20, 20)
       for (let i = 0; i < 29; ++i)
          for (let j = 0; j < 39; ++j)
             if (map[i][j] === 1)
